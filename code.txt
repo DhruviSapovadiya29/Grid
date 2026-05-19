@@ -1,0 +1,2286 @@
+https://chatgpt.com/c/6a0b40ce-b200-83a8-b944-6f5e3ed6f629
+
+
+Wah 🔥 Aa toh moto production-level Angular template che. Aama Angular + Bootstrap + New Angular Control Flow (@if, @for) + Routing + Event Binding + Two-way binding + Dynamic Dropdown + Approval System badhu mix che.
+
+Badhu ek message ma line-by-line literally karu to book bani jai 😄 Etle hu logically sections ma todi ne deep explanation aapu chu.
+
+Overall flow pehla samjho
+Page Load
+   ↓
+Users API thi load
+   ↓
+Table render
+   ↓
+@for users loop
+   ↓
+Each row create
+   ↓
+Edit/Delete/View actions
+   ↓
+Pending request dropdown
+   ↓
+Approve/Reject
+   ↓
+Update UI
+Main Container
+<div class="container-fluid min-vh-100 user-list-page p-0"
+[class.user-list-dark]="isDarkMode">
+
+Break kariye:
+
+container-fluid
+
+Bootstrap class.
+
+Meaning:
+
+Full width container.
+
+Alternative:
+
+container
+
+Difference:
+
+container
+
+fixed width
+
+container-fluid
+
+100% width
+
+min-vh-100
+
+Bootstrap utility.
+
+Equivalent CSS:
+
+min-height:100vh
+
+Meaning:
+
+Minimum full screen height.
+
+p-0
+
+Padding = 0
+
+Bootstrap shorthand:
+
+p = padding
+m = margin
+
+0-5 values
+
+Examples:
+
+p-1
+p-2
+p-3
+[class.user-list-dark]="isDarkMode"
+
+Angular property binding.
+
+If:
+
+isDarkMode=true
+
+Final:
+
+<div class="user-list-dark">
+
+Dark theme active.
+
+Alternative:
+
+[ngClass]
+Card
+<div class="card shadow-lg border-0 rounded-4">
+
+Bootstrap card.
+
+card
+
+Ready component.
+
+Alternative:
+
+<div class="custom-card">
+shadow-lg
+
+Large shadow.
+
+Equivalent:
+
+box-shadow
+border-0
+
+Remove border.
+
+rounded-4
+
+Rounded corners.
+
+Flex section
+<div class="d-flex
+justify-content-between
+align-items-center">
+
+Bootstrap flex utilities.
+
+Equivalent CSS:
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+Meaning:
+
+Title            Buttons
+Theme button
+<button
+class="theme-toggle"
+(click)="toggleTheme()">
+
+Event binding.
+
+Flow:
+
+Click
+
+↓
+
+toggleTheme()
+
+↓
+
+isDarkMode change
+
+↓
+
+class update
+
+↓
+
+theme switch
+
+New Angular syntax
+@if(isDarkMode){
+
+☀️
+
+}@else{
+
+🌙
+
+}
+
+Angular 17+
+
+Old:
+
+<div *ngIf="">
+
+Alternative:
+
+*ngIf
+Router
+<button
+routerLink="/add-user">
+
+Click
+
+↓
+
+navigate
+
+↓
+
+add-user component
+
+Equivalent TS:
+
+this.router.navigate()
+
+Alternative:
+
+href=""
+
+Problem:
+
+refresh thase
+
+Component Inputs Outputs 🔥
+<app-add-user
+
+[reporteeList]="reporteeList"
+
+(closeForm)="closeAddForm()"
+
+(userAdded)="getUsers()">
+
+</app-add-user>
+
+Aa bahu important che.
+
+Break:
+
+Input
+[reporteeList]
+
+Parent
+
+↓
+
+Child data mokle
+
+Equivalent:
+
+Child:
+
+@Input()
+
+reporteeList
+
+Flow:
+
+Parent
+↓
+Child
+Output
+(closeForm)
+
+Child
+
+↓
+
+Parent event mokle
+
+Child:
+
+@Output()
+
+Flow:
+
+Child
+↓
+Parent
+
+Interview ma favourite question 😄
+
+Input vs Output.
+
+Table
+<table
+class="table
+align-middle
+mb-0
+table-striped">
+
+Bootstrap.
+
+table
+
+table design
+
+align-middle
+
+Vertical center
+
+mb-0
+
+margin bottom=0
+
+table-striped
+
+Alternate row colors
+
+Visualization:
+
+white
+gray
+white
+gray
+Loop 🔥
+@for(
+user of users;
+track user.id;
+let i=$index
+)
+
+New Angular syntax.
+
+Equivalent old:
+
+*ngFor="
+let user of users;
+let i=index
+"
+
+Break:
+
+user of users
+
+Loop.
+
+Suppose:
+
+users=[
+
+A
+
+B
+
+C
+
+]
+
+Output:
+
+A
+B
+C
+track user.id
+
+Performance optimization.
+
+Angular internally:
+
+Old:
+
+Complete DOM recreate
+
+With track:
+
+Only changed row update.
+
+Very important.
+
+Alternative:
+
+track $index
+
+But ID better.
+
+let i=$index
+
+Current index.
+
+Example:
+
+0
+1
+2
+
+Used:
+
+editIndex==i
+Edit button
+(click)="editUser(i)"
+
+Flow:
+
+Click
+
+↓
+
+editUser()
+
+↓
+
+editIndex=i
+
+↓
+
+UI rerender
+
+↓
+
+input show
+
+Conditional render
+@if(editIndex==i)
+
+Meaning:
+
+Editing row?
+
+yes
+
+↓
+
+show input
+
+No
+
+↓
+
+show text
+
+Before:
+
+Dhruvi
+
+After:
+
+[input box]
+Two-way binding
+[(ngModel)]
+=
+"editingUser.name"
+
+Flow:
+
+Input type
+
+↓
+
+editingUser update
+
+↓
+
+UI sync
+
+Banana syntax 🍌
+
+Alternative:
+
+Reactive Forms:
+
+formControlName
+Delete
+(click)="
+deleteUser(user.id);
+
+$event.stopPropagation()
+"
+
+Break:
+
+Delete call
+
+stopPropagation()
+
+stopPropagation means:
+
+Parent event sudhi na javanu.
+
+Without:
+
+Button click
+
+↓
+
+parent row click pan thai shake.
+
+Equivalent JS:
+
+event.stopPropagation()
+Dynamic Route
+[routerLink]=
+['/history',user.id]
+
+Suppose:
+
+user.id=25
+
+Generate:
+
+/history/25
+
+Dynamic route.
+
+Dropdown count
+@if(
+getRequestCount(user.id)>0
+)
+
+Badge show if request exists.
+
+Nested loops 🔥
+@for(req of changeRequests)
+
+inside
+
+@for(change of req.changes)
+
+Means:
+
+Loop inside loop.
+
+Structure:
+
+Request
+
+  Field
+  Old
+  New
+Approve button
+(click)="
+approveRequest(
+req,
+reqIndex
+)"
+
+Flow:
+
+Click
+
+↓
+
+API call
+
+↓
+
+update user
+
+↓
+
+change status
+
+↓
+
+UI update
+
+Loading state:
+
+@if(isApproving){
+
+Approving...
+
+}
+
+Very professional pattern.
+
+Status badge
+@if(
+user.status
+==
+'Approved'
+)
+
+Condition:
+
+Approved
+
+↓
+
+Green badge
+
+Rejected
+
+↓
+
+Red
+
+Else
+
+↓
+
+Gray
+
+Complete production flow 🔥
+
+Component load
+
+↓
+
+Users API
+
+↓
+
+users array
+
+↓
+
+@for create rows
+
+↓
+
+Buttons render
+
+↓
+
+Edit/Delete/View
+
+↓
+
+Pending dropdown
+
+↓
+
+Requests loop
+
+↓
+
+Approve/Reject
+
+↓
+
+API update
+
+↓
+
+Table rerender
+
+Aa template ma Angular beginner thi intermediate nai, almost advanced concepts che 😄
+
+Hve aa Header CSS che 🔥 Aa ma tame use karyu:
+
+✅ Flexbox
+✅ Responsive Design
+✅ Media Query
+✅ Hover Effect
+✅ Gradient
+✅ Dark Mode
+✅ Glassmorphism
+✅ Absolute + Relative Position
+✅ Popup Card
+
+Hu line by line explain karu + “aa su kare” + “kem use karyu” + “alternative su hoi”.
+
+Universal Selector
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+*
+
+Meaning:
+
+Badha HTML elements select.
+
+Example:
+
+div
+button
+p
+h1
+
+badha.
+
+margin:0
+
+Browser default spacing remove kare.
+
+Without:
+
+body
+ ↓
+extra space
+
+problem ave.
+
+padding:0
+
+Internal spacing remove.
+
+box-sizing
+box-sizing:border-box;
+
+Very important 🔥
+
+Without:
+
+width:100px;
+padding:20px;
+
+Actual width:
+
+140px
+
+With border-box:
+
+100px
+
+padding andar count thay.
+
+Alternative:
+
+content-box
+
+Default hoy.
+
+Pan responsive ma border-box best.
+
+Header
+.header{
+width:100%;
+height:90px;
+
+Header full width.
+
+Height fixed:
+
+90px
+Gradient Background
+background:
+linear-gradient(
+135deg,
+#1e3a8a,
+#2563eb,
+#3b82f6
+);
+
+Meaning:
+
+3 colors mix.
+
+135deg:
+
+Direction.
+
+Visual:
+
+Dark blue
+   ↘
+      Light blue
+
+Alternative:
+
+Single color:
+
+background:blue;
+
+Pan gradient premium lage.
+
+Padding
+padding:0 40px;
+
+Top-bottom:
+
+0
+
+Left-right:
+
+40
+
+Equivalent:
+
+padding-left:40px;
+padding-right:40px;
+Flexbox
+display:flex;
+
+Children side by side.
+
+Before:
+
+logo
+
+profile
+
+After:
+
+logo       profile
+justify-content
+justify-content:
+space-between;
+
+Visual:
+
+Logo          Profile
+
+Alternative:
+
+center
+space-around
+space-evenly
+align-items
+align-items:center;
+
+Vertical center.
+
+Without:
+
+elements upar niche thai jai.
+
+Border
+border-bottom:
+1px solid rgba(...)
+
+Transparent line.
+
+Alternative:
+
+#ffffff
+Box Shadow
+box-shadow:
+0 10px 30px
+rgba(...)
+
+Parameters:
+
+x
+y
+blur
+color
+
+Effect:
+
+Floating card look.
+
+Logo
+.logo{
+color:white;
+font-size:32px;
+font-weight:bold;
+}
+
+Simple.
+
+Alternative:
+
+font-weight:700;
+
+Same.
+
+Right Side
+.right-side{
+display:flex;
+align-items:center;
+gap:25px;
+}
+
+Children:
+
+theme
+user
+logout
+
+side by side.
+
+gap
+
+Space between items.
+
+Alternative:
+
+margin-right
+
+gap cleaner.
+
+Logout Button
+.logout-btn{
+padding:12px 24px;
+
+Meaning:
+
+top-bottom=12
+left-right=24
+border:none;
+
+Browser border remove.
+
+border-radius:12px;
+
+Rounded.
+
+Alternative:
+
+50%
+
+circle.
+
+background:
+linear-gradient(
+to right,
+#ef4444,
+#dc2626
+);
+
+Red gradient.
+
+cursor:pointer;
+
+Mouse:
+
+🖱️ hand
+
+Without:
+
+normal arrow.
+
+transition:0.3s;
+
+Animation smooth.
+
+Alternative:
+
+transition:
+transform .3s;
+
+Specific.
+
+User List Button
+background:
+rgba(0,0,0,.30)
+
+Transparent black.
+
+RGBA:
+
+R
+G
+B
+Alpha
+
+Alpha=.30
+
+30% visible.
+
+Alternative:
+
+opacity
+
+but opacity whole element par lage.
+
+RGBA better.
+
+Hover
+.logout-btn:hover{
+transform:
+scale(1.05);
+}
+
+Mouse over:
+
+100%
+↓
+105%
+
+zoom.
+
+Alternative:
+
+translateY(-5px)
+
+move up.
+
+Profile
+.profile{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+Layout:
+
+○ Dhruvi
+Circle
+.profile-circle{
+width:50px;
+height:50px;
+border-radius:50%;
+}
+
+50% means perfect circle.
+
+Alternative:
+
+999px
+
+also works.
+
+Glassmorphism
+background:
+rgba(255,255,255,.2);
+
+backdrop-filter:
+blur(10px);
+
+Most modern effect 🔥
+
+Visual:
+
+glass effect
+
+Alternative:
+
+Simple:
+
+background:white
+Media Query
+@media(
+max-width:768px
+)
+
+Meaning:
+
+If screen:
+
+768 or less
+
+run this CSS.
+
+Header:
+
+flex-direction:
+column;
+
+Before:
+
+Logo Profile
+
+After:
+
+Logo
+Profile
+
+Mobile friendly.
+
+flex-wrap
+flex-wrap:wrap;
+
+If no space:
+
+item
+item
+
+new line.
+
+Alternative:
+
+nowrap
+Dark Mode
+.dark-header{
+background:
+linear-gradient(
+to right,
+#020617,
+#111827
+);
+}
+
+Black theme.
+
+HTML:
+
+[class.dark-header]
+=
+isDark
+Theme Button
+.theme-toggle{
+border-radius:50%;
+}
+
+Circle.
+
+Hover:
+
+transform:
+translateY(-2px)
+
+Meaning:
+
+Move button:
+
+up
+
+2px.
+
+Alternative:
+
+scale()
+Position Relative
+.profile{
+position:relative;
+}
+
+Important.
+
+Reason:
+
+Popup absolute che.
+
+Absolute parent ne find kare.
+
+Popup
+.profile-popup{
+
+position:absolute;
+
+top:72px;
+
+right:0;
+}
+
+Meaning:
+
+72px niche
+
+Visual:
+
+Profile
+    ↓
+Popup
+Hidden Initially
+opacity:0;
+visibility:hidden;
+
+Hide.
+
+Difference:
+
+opacity only invisible.
+
+visibility remove interaction.
+
+Together use karvu smart che.
+
+translate
+transform:
+translateY(10px)
+
+Initially niche.
+
+Then hover:
+
+translateY(0)
+
+Animation.
+
+Hover Open
+.profile:hover
+.profile-popup
+
+Meaning:
+
+Mouse profile par ave:
+
+Popup show.
+
+Flow:
+
+Hover
+ ↓
+opacity:1
+ ↓
+visible
+ ↓
+translateY(0)
+z-index
+z-index:999;
+
+Popup upper layer.
+
+Without:
+
+Table ni niche jai sake.
+
+word-break
+word-break:
+break-all;
+
+Long email:
+
+abcabcabcabc...
+
+new line ma tute.
+
+Alternative:
+
+overflow-wrap:
+break-word
+
+Aa CSS ma tame use karyu:
+
+✅ Universal selector
+✅ Flexbox
+✅ RGBA
+✅ Gradient
+✅ Hover
+✅ Transform
+✅ Transition
+✅ Responsive media query
+✅ Dark mode
+✅ Glassmorphism
+✅ Relative + Absolute
+✅ z-index
+✅ Popup animation
+
+Aa level nu CSS generally portfolio projects ma pan use thay 🔥
+
+<header class="header" [class.dark-header]="isDarkMode">
+
+  <div class="logo">
+    FutureVision
+  </div>
+
+  <div class="right-side">
+
+    <button class="user-list" (click)="goToUserList()">
+      Users
+    </button>
+
+    <button class="logout-btn" (click)="logout()">
+      Logout
+    </button>
+
+    <!-- PROFILE -->
+
+    <div class="profile">
+
+      <div class="profile-circle">
+        {{ username.charAt(0) }}
+      </div>
+
+      <!-- HOVER PROFILE CARD -->
+
+      <div class="profile-popup">
+
+        <div class="popup-top">
+
+          <div class="popup-circle">
+            {{ username.charAt(0) }}
+          </div>
+
+          <div>
+            <h3>{{ username }}</h3>
+            <p>{{ email }}</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- DARK LIGHT TOGGLE -->
+
+    <button class="theme-toggle" (click)="toggleTheme()">
+
+      @if (isDarkMode) {
+        ☀️
+      } @else {
+        🌙
+      }
+
+    </button>
+
+  </div>
+
+</header>
+
+Haa 😄 Hve aa Header HTML che. Aa ma Angular na khub important concepts use thaya che:
+
+✅ Property/Class Binding
+✅ Event Binding
+✅ Interpolation
+✅ Method Call in HTML
+✅ Nested Div Structure
+✅ Hover Popup
+✅ @if/@else Angular 20 syntax
+
+Hu line-by-line + "kem use karyu" + "alternative su" explain karu.
+
+Main Header
+<header class="header"
+[class.dark-header]="isDarkMode">
+
+Aa HTML5 semantic tag che.
+
+Alternative:
+
+<div class="header">
+
+Pan header better che.
+
+Reason:
+
+SEO + readability.
+
+[class.dark-header]
+
+Aa Angular Class Binding.
+
+Meaning:
+
+If:
+
+isDarkMode=true
+
+Browser:
+
+<header class="
+header dark-header">
+
+Else:
+
+<header class="header">
+
+Flow:
+
+Theme Click
+    ↓
+isDarkMode=true
+    ↓
+dark-header class add
+    ↓
+CSS apply
+
+Alternative:
+
+[ngClass]="{
+'dark-header':isDarkMode
+}"
+
+Difference:
+
+Single class → [class]
+
+Multiple → ngClass
+
+Logo
+<div class="logo">
+FutureVision
+</div>
+
+Simple text.
+
+Browser:
+
+FutureVision
+
+Alternative:
+
+Image logo:
+
+<img src="logo.png">
+
+or
+
+<h1>FutureVision</h1>
+Right Side Container
+<div class="right-side">
+
+Inside:
+
+Users
+Logout
+Profile
+Theme
+
+CSS flex thi side-by-side.
+
+Users Button
+<button
+class="user-list"
+(click)="goToUserList()">
+Users
+</button>
+(click)
+
+Angular Event Binding.
+
+Meaning:
+
+Click thay:
+
+goToUserList()
+
+run.
+
+Flow:
+
+Click
+ ↓
+goToUserList()
+ ↓
+navigate()
+ ↓
+User page
+
+Alternative:
+
+<button
+routerLink="/user-list">
+
+Difference:
+
+routerLink:
+
+direct.
+
+Method:
+
+extra logic possible.
+
+Example:
+
+if(login){
+navigate
+}
+Logout Button
+<button
+class="logout-btn"
+(click)="logout()">
+
+Click:
+
+logout()
+
+likely:
+
+localStorage.clear()
+
+router.navigate()
+
+Flow:
+
+Click
+ ↓
+logout()
+ ↓
+clear storage
+ ↓
+login page
+Profile Div
+<div class="profile">
+
+Container.
+
+Contains:
+
+Circle
+
+Popup
+Profile Circle
+<div class="profile-circle">
+
+{{username.charAt(0)}}
+
+</div>
+
+Most important 🔥
+
+Interpolation:
+
+{{ }}
+
+Angular TS data HTML ma mokle.
+
+Suppose:
+
+username="Dhruvi"
+
+Then:
+
+charAt(0)
+
+Result:
+
+D
+
+Browser:
+
+○ D
+
+Breakdown:
+
+charAt(index)
+
+Example:
+
+"Dhruvi"
+
+0=D
+
+1=h
+
+2=r
+
+Alternative:
+
+username[0]
+
+or
+
+slice(0,1)
+
+Tamaro:
+
+charAt(0)
+
+safe che.
+
+Reason:
+
+Empty string handle better.
+
+Popup
+<div class="profile-popup">
+
+Initially hidden.
+
+CSS:
+
+opacity:0
+
+Hover:
+
+.profile:hover
+
+show.
+
+Structure:
+
+Popup
+
+○ D
+Dhruvi
+abc@gmail
+Popup Top
+<div class="popup-top">
+
+Layout manage.
+
+Flex.
+
+Popup Circle
+<div class="popup-circle">
+
+{{username.charAt(0)}}
+
+</div>
+
+Same logic.
+
+Only bigger version.
+
+Username
+<h3>
+
+{{username}}
+
+</h3>
+
+Interpolation.
+
+Suppose:
+
+username="Dhruvi"
+
+Result:
+
+Dhruvi
+
+Alternative:
+
+Property binding nathi.
+
+Text mate interpolation best.
+
+Email
+<p>
+
+{{email}}
+
+</p>
+
+Example:
+
+email=
+"abc@gmail.com"
+
+Browser:
+
+abc@gmail.com
+Theme Toggle
+<button
+class="theme-toggle"
+
+(click)="toggleTheme()">
+
+Click:
+
+toggleTheme()
+
+run.
+
+Flow:
+
+Click
+ ↓
+isDarkMode
+ ↓
+true
+ ↓
+dark CSS
+Angular New IF
+@if(isDarkMode){
+
+☀️
+
+}
+@else{
+
+🌙
+
+}
+
+Angular 17+ control flow.
+
+Meaning:
+
+If:
+
+true
+
+show:
+
+☀️
+
+Else:
+
+🌙
+
+Old Angular:
+
+<span *ngIf="isDarkMode">
+
+☀️
+
+</span>
+
+<span *ngIf="!isDarkMode">
+
+🌙
+
+</span>
+
+New syntax cleaner 🔥
+
+Overall UI Structure
+------------------------------------------------
+
+FutureVision
+
+Users Logout ○D 🌙
+
+             ↓ hover
+
+            ○D
+          Dhruvi
+     abc@gmail.com
+
+------------------------------------------------
+
+Ahiya tame use karyu:
+
+✅ Event Binding (click)
+✅ Interpolation {{ }}
+✅ JS Method charAt()
+✅ Angular Class Binding
+✅ Angular @if
+✅ Nested Layout
+✅ Hover Popup Structure
+✅ Dynamic Profile Avatar
+
+Aa structure professional dashboard jevu lage che 🔥
+
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
+
+@Component({
+  selector: 'app-header',
+  imports: [],
+  templateUrl: './header.html',
+  styleUrl: './header.css',
+})
+export class Header {
+
+  username = '';
+  email = '';
+
+  router = inject(Router);
+
+  ngOnInit() {
+    this.username = localStorage.getItem('username') || '';
+    this.email = localStorage.getItem('email') || '';
+  }
+
+  goToUserList() {
+    this.router.navigate(['/user-list']);
+  }
+
+  logout() {
+
+    Swal.fire({
+      title: 'Are You Sure You Want to Leave?',
+      text: 'You will be redirected to login page',
+      iconColor: '#ff6b6b',
+      icon: 'question',
+
+      showCancelButton: true,
+
+      confirmButtonColor: '#dc3545',
+      confirmButtonText: 'Logout',
+
+      cancelButtonText: 'Cancel',
+
+      // CHANGE: custom dark mode classes
+      customClass: {
+        popup: 'my-swal-popup',
+        title: 'my-swal-title',
+        htmlContainer: 'my-swal-text',
+        confirmButton: 'my-swal-confirm',
+        cancelButton: 'my-swal-cancel'
+      }
+
+    }).then((result: any) => {
+
+      if (result.isConfirmed) {
+
+        Swal.fire({
+
+          icon: 'success',
+          title: 'Logged Out Successfully',
+
+          timer: 1000,
+          showConfirmButton: false,
+
+          // CHANGE: success popup dark mode
+          customClass: {
+            popup: 'my-swal-popup',
+            title: 'my-swal-title',
+            htmlContainer: 'my-swal-text'
+          }
+
+        });
+
+        setTimeout(() => {
+
+          this.router.navigate(['']);
+
+        }, 1000);
+
+      }
+
+    });
+
+  }
+
+  isDarkMode = false;
+
+  toggleTheme() {
+    this.isDarkMode = !this.isDarkMode;
+
+    document.body.classList.toggle(
+      'dark-mode',
+      this.isDarkMode
+    );
+  }
+}
+
+Haa 😄 Hve aa Header TypeScript che. Aa component ma Angular na khub important concepts che:
+
+✅ Dependency Injection (inject)
+✅ Router Navigation
+✅ LocalStorage
+✅ Lifecycle Hook (ngOnInit)
+✅ SweetAlert2
+✅ Async .then()
+✅ setTimeout()
+✅ Theme Toggle
+✅ DOM Manipulation
+
+Hu line-by-line explain karu + kem use karyu + alternative pan kahu.
+
+Imports
+import { Component, inject } from '@angular/core';
+Component
+
+Aa class ne Angular component banave.
+
+Without:
+
+Angular ne khabar nai pade ke aa UI component che.
+
+inject()
+
+New Angular dependency injection.
+
+Tamaro:
+
+router = inject(Router);
+
+Old style:
+
+constructor(
+private router:Router
+){}
+
+Banne same.
+
+Tamaro Angular 20 modern style 🔥
+
+import { Router } from '@angular/router';
+
+Page navigate karva mate.
+
+Example:
+
+dashboard
+    ↓
+user-list
+import Swal from 'sweetalert2';
+
+Popup library import.
+
+Without SweetAlert:
+
+Browser popup:
+
+alert("Logout");
+
+Pan ugly lage 😄
+
+SweetAlert:
+
+Beautiful popup
+Buttons
+Animation
+Icons
+Component Decorator
+@Component({
+selector:'app-header',
+
+HTML ma:
+
+<app-header>
+
+render.
+
+imports:[]
+
+Ahiya empty che.
+
+Kem?
+
+Aa component ma koi standalone import nathi.
+
+Jo RouterLink, FormsModule use karta hot:
+
+imports:[
+RouterLink
+]
+templateUrl:'./header.html'
+
+HTML file.
+
+styleUrl:'./header.css'
+
+CSS file.
+
+Class
+export class Header
+
+Aa main logic class.
+
+Variables
+username=''
+email=''
+
+Storage variable.
+
+Initially:
+
+username=''
+
+After:
+
+username='Dhruvi'
+Router Injection
+router=inject(Router)
+
+Angular internally:
+
+Injector
+   ↓
+Router object
+   ↓
+router variable
+
+Kem?
+
+Navigation mate.
+
+ngOnInit()
+ngOnInit()
+
+Lifecycle hook.
+
+Flow:
+
+constructor
+    ↓
+ngOnInit
+    ↓
+UI render
+Local Storage Username
+this.username=
+localStorage.getItem(
+'username'
+)
+||
+''
+
+Breakdown:
+
+localStorage
+
+Browser memory.
+
+Example:
+
+username:
+Dhruvi
+getItem()
+
+Value fetch.
+
+||
+
+Fallback.
+
+If:
+
+null
+
+Then:
+
+''
+
+avoid error.
+
+Equivalent:
+
+if(data){
+}
+else{
+}
+
+Email same logic.
+
+goToUserList()
+goToUserList(){
+
+this.router.navigate(
+['/user-list']
+)
+
+}
+
+Flow:
+
+Click
+ ↓
+goToUserList
+ ↓
+navigate
+ ↓
+User List Page
+
+Alternative:
+
+HTML:
+
+routerLink="/user-list"
+
+Difference:
+
+Method ma extra logic muki sakay.
+
+Example:
+
+if(login){
+navigate()
+}
+logout()
+logout(){
+
+Logout logic.
+
+Swal.fire
+Swal.fire({
+
+Popup open.
+
+Title:
+
+title:
+'Are You Sure'
+
+Heading.
+
+Text:
+
+text:
+'redirected'
+
+Description.
+
+Icon:
+
+icon:'question'
+
+Question mark icon.
+
+Alternative:
+
+success
+error
+warning
+info
+
+Color:
+
+iconColor:
+'#ff6b6b'
+
+custom color.
+
+Cancel Button
+
+showCancelButton:true
+
+Without:
+
+Only logout.
+
+With:
+
+Logout Cancel
+
+Confirm Button
+
+confirmButtonText:
+'Logout'
+
+Cancel:
+
+cancelButtonText:
+'Cancel'
+customClass
+customClass:{
+popup:
+'my-swal-popup'
+}
+
+SweetAlert CSS override.
+
+Meaning:
+
+Popup CSS tame custom kari shako.
+
+Alternative:
+
+Default CSS.
+
+then()
+.then((result:any)=>{
+
+Very important 🔥
+
+Popup asynchronous che.
+
+Flow:
+
+Popup open
+   ↓
+User click
+   ↓
+then()
+
+Without then:
+
+User response detect nai thai.
+
+Alternative:
+
+async await
+
+Example:
+
+const result=
+await Swal.fire()
+Confirm Check
+if(
+result.isConfirmed
+)
+
+Meaning:
+
+User Logout click kare.
+
+Cancel kare:
+
+Nothing.
+
+Success Popup
+Swal.fire({
+icon:'success'
+})
+
+Show:
+
+Logged out successfully
+Timer
+timer:1000
+
+1 second.
+
+Popup auto close.
+
+Alternative:
+
+showConfirmButton:true
+
+User close manually.
+
+setTimeout
+setTimeout(()=>{
+
+Delay.
+
+Meaning:
+
+1 second wait.
+
+Flow:
+
+success popup
+    ↓
+1 sec wait
+    ↓
+navigate
+
+Navigate:
+
+this.router.navigate([''])
+
+Meaning:
+
+Root page.
+
+Usually login.
+
+Alternative:
+
+['/login']
+Dark Mode
+isDarkMode=false
+
+Theme state.
+
+Toggle
+toggleTheme(){
+
+this.isDarkMode=
+!this.isDarkMode
+
+false:
+
+🌙
+
+↓
+
+click
+
+↓
+
+true:
+
+☀️
+
+Shortcut:
+
+!value
+
+Instead of:
+
+if(){
+
+}else{}
+document.body.classList.toggle()
+
+Most important 🔥
+
+document.body.classList.toggle(
+'dark-mode',
+this.isDarkMode
+)
+
+Meaning:
+
+If:
+
+true
+
+add:
+
+<body class="
+dark-mode">
+
+Else remove.
+
+Flow:
+
+Click
+ ↓
+isDark=true
+ ↓
+body add class
+ ↓
+CSS dark mode
+
+Alternative:
+
+Angular style:
+
+[class.dark-mode]
+=
+isDarkMode
+
+Tamaro current approach global dark mode mate sari che.
+
+Reason:
+
+Body level dark mode badha component par apply thay.
+
+One improvement:
+
+Ahiya refresh pachi theme reset thai jai.
+
+Better:
+
+toggleTheme(){
+
+this.isDarkMode=
+!this.isDarkMode;
+
+localStorage.setItem(
+'theme',
+this.isDarkMode
+?'dark'
+:'light'
+);
+
+}
+
+Then ngOnInit:
+
+const theme=
+localStorage.getItem(
+'theme'
+);
+
+To refresh pachi pan theme save rahe 🔥

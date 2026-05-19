@@ -17,10 +17,14 @@ export class Login {
     password: ''
   };
 
+  isDark = false;
+
+  changeMode() {
+    this.isDark = !this.isDark;
+  }
+
   constructor(private router: Router) { }
-
   login(form: NgForm) {
-
     if (form.valid) {
 
       localStorage.setItem(
@@ -28,11 +32,12 @@ export class Login {
         this.user.name
       );
 
+      localStorage.setItem(
+        'email',
+        this.user.email
+      );
+
       this.router.navigate(['/dashboard']);
-
     }
-
   }
-
-
 }

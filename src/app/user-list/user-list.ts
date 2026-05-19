@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AddUser } from '../add-user/add-user';
 import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-user-list',
@@ -14,22 +15,61 @@ import Swal from 'sweetalert2';
   styleUrl: './user-list.css',
 })
 export class UserList implements OnInit {
-  showAddForm = false;
-  http = inject(HttpClient);
 
-  users: any[] = [{
-    name: 'dhruvi',
-    email: 'dhruvi@gmail.com'
-  }];
+  showAddForm = false;
+
+  http = inject(HttpClient);
+  cdr = inject(ChangeDetectorRef);
+
+  users: any[] = [];
+  reporteeList: string[] = [];
 
   editIndex: number = -1;
   oldUser: any = null;
   editingUser: any = null;
+
   changeRequests: any[] = [];
-  isDeleting: boolean = false;
+  historyRequests: any[] = [];
+
+  isApproving = false;
+  isRejecting = false;
+
+  isDarkMode = false;
 
   ngOnInit() {
     this.getUsers();
+
+    // CHANGE: pending dropdown request refresh pachi pan rahe
+    const pendingData = localStorage.getItem('changeRequests');
+
+    if (pendingData) {
+      this.changeRequests = JSON.parse(pendingData);
+    }
+
+    // CHANGE: history page ma pending/approved/rejected badhu rahe
+    const historyData = localStorage.getItem('historyRequests');
+
+    if (historyData) {
+      this.historyRequests = JSON.parse(historyData);
+    }
+
+    const savedTheme = localStorage.getItem('userListTheme');
+
+    if (savedTheme === 'dark') {
+      this.isDarkMode = true;
+    } else {
+      this.isDarkMode = false;
+    }
+  }
+
+  toggleTheme() {
+    this.isDarkMode = !this.isDarkMode;
+
+    if (this.isDarkMode) {
+      localStorage.setItem('userListTheme', 'dark');
+    } else {
+      localStorage.setItem('userListTheme', 'light');
+    }
   }
 
   openAddForm() {
@@ -40,23 +80,62 @@ export class UserList implements OnInit {
     this.showAddForm = false;
   }
 
-  getUsers() {
+  getUsers(): void {
     this.http.get<any[]>(
       'https://69e0d98d29c070e6597c24fa.mockapi.io/user'
     ).subscribe({
       next: (result) => {
-        this.users = result;
+        this.users = result.reverse();
+
+        this.reporteeList = [
+          ...new Set(result.map(user => user.name))
+        ];
+
+        this.cdr.detectChanges();
       },
       error: (err) => {
-        console.log('API Error:', err);
+        console.log(err);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'API Error'
+        });
       }
     });
   }
 
   editUser(index: number) {
     this.editIndex = index;
-    this.oldUser = { ...this.users[index] };
-    this.editingUser = { ...this.users[index] };
+
+    this.oldUser = {
+      ...this.users[index],
+      reportee: [...(this.users[index].reportee || [])]
+    };
+
+    this.editingUser = {
+      ...this.users[index],
+      reportee: [...(this.users[index].reportee || [])]
+    };
+
+    this.reporteeList = this.users
+      .filter(user => user.name !== this.editingUser.name)
+      .map(user => user.name);
+
+    this.cdr.detectChanges();
+  }
+
+  toggleReportee(name: string, event: any) {
+    if (!this.editingUser.reportee) {
+      this.editingUser.reportee = [];
+    }
+
+    if (event.target.checked) {
+      this.editingUser.reportee.push(name);
+    } else {
+      this.editingUser.reportee = this.editingUser.reportee.filter(
+        (r: string) => r !== name
+      );
+    }
   }
 
   saveUser(index: number) {
@@ -100,15 +179,50 @@ export class UserList implements OnInit {
     }
 
     if (changes.length > 0) {
-      this.changeRequests.push({
+
+      // CHANGE: one request object banavyo
+      const requestData = {
         userIndex: index,
         userId: user.id,
-        oldData: { ...this.oldUser },
-        newData: { ...user },
-        changes: changes
-      });
 
-      Swal.fire('Request Created', 'Edit request generated. Please approve from dropdown.', 'success');
+        oldData: {
+          ...this.oldUser,
+          reportee: [...(this.oldUser.reportee || [])]
+        },
+
+        newData: {
+          ...user,
+          reportee: [...(user.reportee || [])]
+        },
+
+        changes: changes,
+
+        status: 'Pending'
+      };
+
+      // CHANGE: dropdown ma pending request batavva
+      this.changeRequests.push(requestData);
+
+      // CHANGE: history page ma pending request pan batavva
+      this.historyRequests.push(requestData);
+
+      // CHANGE: pending request refresh pachi pan dropdown ma rahe
+      localStorage.setItem(
+        'changeRequests',
+        JSON.stringify(this.changeRequests)
+      );
+
+      // CHANGE: history refresh pachi pan rahe
+      localStorage.setItem(
+        'historyRequests',
+        JSON.stringify(this.historyRequests)
+      );
+
+      Swal.fire(
+        'Request Created',
+        'Edit request generated. Please approve from dropdown.',
+        'success'
+      );
     }
 
     this.editIndex = -1;
@@ -117,6 +231,19 @@ export class UserList implements OnInit {
   }
 
 approveRequest(req: any, reqIndex: number) {
+  this.isApproving = true;
+
+  // CHANGE: dropdown request status Approved
+  req.status = 'Approved';
+
+  // CHANGE: history page ma same pending request ne Approved karva
+  const historyItem = this.historyRequests.find(
+    item => item.userId == req.userId && item.status == 'Pending'
+  );
+
+  if (historyItem) {
+    historyItem.status = 'Approved';
+  }
 
   const approvedUser = {
     ...req.newData,
@@ -128,25 +255,55 @@ approveRequest(req: any, reqIndex: number) {
     approvedUser
   ).subscribe({
     next: () => {
+      setTimeout(() => {
+        this.isApproving = false;
 
-      this.users[req.userIndex] = approvedUser;
+        this.users[req.userIndex] = approvedUser;
 
-      this.changeRequests.splice(reqIndex, 1);
+        // CHANGE: dropdown mathi pending request remove
+        this.changeRequests.splice(reqIndex, 1);
 
-      Swal.fire(
-        'Approved',
-        'Changes Approved Successfully',
-        'success'
-      );
+        localStorage.setItem(
+          'changeRequests',
+          JSON.stringify(this.changeRequests)
+        );
+
+        // CHANGE: updated history status save
+        localStorage.setItem(
+          'historyRequests',
+          JSON.stringify(this.historyRequests)
+        );
+
+        this.cdr.detectChanges();
+
+        Swal.fire(
+          'Approved',
+          'Changes Approved Successfully',
+          'success'
+        );
+      }, 2000);
     },
-
     error: (err) => {
+      this.isApproving = false;
       console.log(err);
     }
   });
 }
 
 rejectRequest(req: any, reqIndex: number) {
+  this.isRejecting = true;
+
+  // CHANGE: dropdown request status Rejected
+  req.status = 'Rejected';
+
+  // CHANGE: history page ma same pending request ne Rejected karva
+  const historyItem = this.historyRequests.find(
+    item => item.userId == req.userId && item.status == 'Pending'
+  );
+
+  if (historyItem) {
+    historyItem.status = 'Rejected';
+  }
 
   const rejectedUser = {
     ...req.oldData,
@@ -158,65 +315,84 @@ rejectRequest(req: any, reqIndex: number) {
     rejectedUser
   ).subscribe({
     next: () => {
+      setTimeout(() => {
+        this.isRejecting = false;
 
-      this.users[req.userIndex] = rejectedUser;
+        this.users[req.userIndex] = rejectedUser;
 
-      this.changeRequests.splice(reqIndex, 1);
+        // CHANGE: dropdown mathi pending request remove
+        this.changeRequests.splice(reqIndex, 1);
 
-      Swal.fire(
-        'Rejected',
-        'Edit request rejected successfully.',
-        'info'
-      );
+        localStorage.setItem(
+          'changeRequests',
+          JSON.stringify(this.changeRequests)
+        );
+
+        // CHANGE: updated history status save
+        localStorage.setItem(
+          'historyRequests',
+          JSON.stringify(this.historyRequests)
+        );
+
+        this.cdr.detectChanges();
+
+        Swal.fire(
+          'Rejected',
+          'Sorry, Your Edit request rejected so your changes not displayed',
+          'warning'
+        );
+      }, 2000);
     },
-
     error: (err) => {
+      this.isRejecting = false;
       console.log(err);
     }
   });
 }
 
-  deleteUser(id: string, index: number) {
-    if (this.isDeleting) {
-      return;
-    }
+  getRequestCount(userId: string): number {
+    return this.changeRequests.filter(
+      req => req.userId == userId && req.status === 'Pending'
+    ).length;
+  }
 
+  getHistory(userId: string) {
+    return this.historyRequests.filter(
+      req => req.userId == userId
+    );
+  }
+
+  deleteUser(id: string) {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'This user will be deleted permanently!',
+      title: 'Delete User?',
+      text: 'This action cannot be undone',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it',
-      cancelButtonText: 'Cancel',
-      confirmButtonColor: '#dc3545'
+      confirmButtonColor: '#dc3545',
+      confirmButtonText: 'Delete'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.isDeleting = true;
-
         this.http.delete(
           'https://69e0d98d29c070e6597c24fa.mockapi.io/user/' + id
         ).subscribe({
           next: () => {
-            this.users.splice(index, 1);
-            this.getUsers();
-            this.isDeleting = false;
+            this.cdr.detectChanges();
 
             Swal.fire({
-              title: 'Deleted!',
-              text: 'User deleted successfully.',
               icon: 'success',
-              timer: 1500,
+              title: 'Deleted Successfully',
+              timer: 1000,
               showConfirmButton: false
             });
+
+            window.location.reload();
           },
           error: (err) => {
             console.log(err);
-            this.isDeleting = false;
 
             Swal.fire({
-              title: 'Error!',
-              text: 'User not deleted. Please try again.',
-              icon: 'error'
+              icon: 'error',
+              title: 'Delete Failed'
             });
           }
         });

@@ -1,49 +1,306 @@
-body{
-    background: #f9fbf4;
+body {
+  background: #f9fbf4;
 }
 
-.card{
-    overflow: hidden;
+.card {
+  overflow: hidden;
 }
 
-table th{
-    padding: 18px ;
-    font-size: 14px;
-    font-weight: 600;
-    border: none ;
+table th {
+  padding: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+
 }
 
-table td{
-    padding: 18px;
-    vertical-align: middle;
-    border-color: #f1f1f1;
+table td {
+  padding: 18px;
+  vertical-align: middle;
+  border-color: #f1f1f1;
+
 }
 
-.table tbody tr{
-    transition: 0.3s;
+.table tbody tr {
+  transition: 0.3s;
 }
 
-.table tbody tr:hover{
-    background: #fafafa;
+.table tbody tr:hover {
+  background: #fafafa;
 }
 
-.icon-btn{
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.icon-btn i{
-    font-size: 14px;
+table {
+  margin-bottom: 250px;
 }
 
-.dropdown-menu{
-    min-width: 170px;
+.icon-btn i {
+  font-size: 14px;
 }
 
-.badge{
+.dropdown-menu {
+  min-width: 170px;
+}
+
+.form-control {
+  width: 230px;
+}
+
+.request-card {
+  width: 300px;
+}
+
+
+.badge {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.reportee-badge {
+  background: #e5e7eb;
+  padding: 10px 13px;
+  border-radius: 10px;
+  display: inline-block;
+  white-space: normal;
+  max-width: 240px;
+  font-size: 13px;
+  font-weight: bolder;
+}
+
+@media (max-width: 992px) {
+
+  table th,
+  table td {
+    padding: 14px 12px;
     font-size: 13px;
-    font-weight: 500;
+  }
+
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .badge {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .card {
+    border-radius: 14px;
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 700px;
+  }
+
+  table th,
+  table td {
+    padding: 12px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .icon-btn i {
+    font-size: 12px;
+  }
+
+  .dropdown-menu {
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 8px;
+    background: #f9fbf4;
+  }
+
+  .card {
+    border-radius: 12px;
+  }
+
+  table {
+    min-width: 650px;
+  }
+
+  table th,
+  table td {
+    padding: 10px 8px;
+    font-size: 11px;
+  }
+
+  .badge {
+    font-size: 11px;
+    padding: 5px 8px;
+  }
+
+  .icon-btn {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+
+
+
+/* dark mode  */
+
+
+.theme-toggle {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 12px;
+  background: #e5e7eb;
+  color: #111827;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.theme-toggle:hover {
+  background: #d1d5db;
+}
+
+
+/* Dark Mode changes */
+
+.user-list-page {
+  background: #f9fbf4;
+}
+
+.user-list-dark {
+  background: #0f172a !important;
+  color: #e5e7eb;
+}
+
+.user-list-dark .card {
+  background: #111827 !important;
+  color: #e5e7eb;
+}
+
+.user-list-dark .card-header {
+  background: #1f2937 !important;
+  color: #e5e7eb;
+}
+
+.user-list-dark .text-muted {
+  color: #cbd5e1 !important;
+}
+
+.user-list-dark .table {
+  background: #111827 !important;
+  color: #f9fafb;
+}
+
+.user-list-dark .table thead th {
+  background: #1e293b !important;
+  color: white !important;
+  border-color: #374151 !important;
+}
+
+.user-list-dark .table tbody tr {
+  background: #111827 !important;
+}
+
+.user-list-dark .table tbody td {
+  background: #111827 !important;
+  color: #e5e7eb !important;
+  border-color: #374151 !important;
+}
+
+.user-list-dark .table-striped tbody tr:nth-of-type(odd) td {
+  background: #172033 !important;
+}
+
+.user-list-dark .table tbody tr:hover td {
+  background: #1f2937 !important;
+}
+
+.user-list-dark .theme-toggle {
+  background: #374151;
+  color: white;
+}
+
+.user-list-dark .theme-toggle:hover {
+  background: #4b5563;
+}
+
+.user-list-dark .dropdown-menu {
+  background: #1f2937;
+  border: 1px solid #374151;
+}
+
+.user-list-dark .dropdown-item {
+  color: white;
+}
+
+.user-list-dark .dropdown-item:hover {
+  background: #374151;
+}
+
+.user-list-dark input,
+.user-list-dark select {
+  background: #1f2937;
+  color: white;
+  border: 1px solid #374151;
+}
+
+.user-list-dark .reportee-badge {
+  background: #374151 !important;
+  color: white !important;
+}
+
+/* REQUEST CARD TEXT FIX */
+
+.user-list-dark .request-card h6,
+.user-list-dark .request-card p,
+.user-list-dark .request-card .old-text,
+.user-list-dark .request-card .new-text {
+  color: white !important;
+}
+
+/* FIELD NAME */
+
+.user-list-dark .request-card .text-primary {
+  color: #60a5fa !important;
+}
+
+/* DARK MODE REPORTEE DROPDOWN FIX */
+
+.user-list-dark .form-check-label {
+  color: white !important;
+  cursor: pointer;
+}
+
+.user-list-dark .form-check-input {
+  cursor: pointer;
+}
+
+.user-list-dark .dropdown-menu .form-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 4px;
+}
+
+.user-list-dark .dropdown-menu li {
+  color: white !important;
 }
